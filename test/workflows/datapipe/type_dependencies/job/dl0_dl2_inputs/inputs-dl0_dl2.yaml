@@ -1,0 +1,5 @@
+processing_config: null
+
+dl0:
+  class: File
+  path: 'gamma_prod5.simtel.zst'

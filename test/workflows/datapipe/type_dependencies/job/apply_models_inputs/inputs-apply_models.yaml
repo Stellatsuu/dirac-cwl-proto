@@ -1,0 +1,10 @@
+events:
+  class: File
+  path: 'gamma_test_geo.dl2.h5'
+models:
+  - class: File
+    path: 'energy_model.pkl'
+  - class: File
+    path: 'classifier_model.pkl'
+
+output_filename: 'applied.dl2.h5'

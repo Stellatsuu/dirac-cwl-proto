@@ -43,9 +43,7 @@ def cleanup():
         # A string input is passed
         (
             "test/workflows/helloworld/description_with_inputs.cwl",
-            [
-                "test/workflows/helloworld/type_dependencies/job/inputs-helloworld_with_inputs1.yaml"
-            ],
+            ["test/workflows/helloworld/type_dependencies/job/inputs-helloworld_with_inputs1.yaml"],
         ),
         # Multiple string inputs are passed
         (
@@ -118,34 +116,53 @@ def cleanup():
         # Complete
         (
             "test/workflows/mandelbrot/description.cwl",
-            [
-                "test/workflows/mandelbrot/type_dependencies/job/inputs-mandelbrot_complete.yaml"
-            ],
+            ["test/workflows/mandelbrot/type_dependencies/job/inputs-mandelbrot_complete.yaml"],
         ),
         # Image production only
         ("test/workflows/mandelbrot/image-prod.cwl", []),
         # Image merge only
         (
             "test/workflows/mandelbrot/image-merge.cwl",
-            [
-                "test/workflows/mandelbrot/type_dependencies/job/inputs-mandelbrot_imagemerge.yaml"
-            ],
+            ["test/workflows/mandelbrot/type_dependencies/job/inputs-mandelbrot_imagemerge.yaml"],
         ),
         # --- Gaussian fit example ---
         # Data generation only
         (
             "test/workflows/gaussian_fit/data_generation/data-generation.cwl",
-            [
-                "test/workflows/gaussian_fit/type_dependencies/job/inputs-data-generation.yaml"
-            ],
+            ["test/workflows/gaussian_fit/type_dependencies/job/inputs-data-generation.yaml"],
         ),
         # Gaussian fit only
         (
             "test/workflows/gaussian_fit/gaussian_fit/gaussian-fit.cwl",
-            [
-                "test/workflows/gaussian_fit/type_dependencies/job/inputs-gaussian-fit.yaml"
-            ],
+            ["test/workflows/gaussian_fit/type_dependencies/job/inputs-gaussian-fit.yaml"],
         ),
+
+        # --- Datapipe example ---
+        # Apply models
+        (
+            "test/workflows/datapipe/apply_models.cwl",
+            ["test/workflows/datapipe/type_dependencies/job/apply_models_inputs/inputs-apply_models.yaml"]
+        ),
+        # Merge
+        (
+            "test/workflows/datapipe/merge.cwl",
+            ["test/workflows/datapipe/type_dependencies/job/merge_inputs/inputs-merge.yaml"]
+        ),
+        # Complete workflow
+        (
+            "test/workflows/datapipe/workflow_dl0_dl2/workflow_dl0_to_dl2.cwl",
+            ["test/workflows/datapipe/type_dependencies/job/dl0_dl2_inputs/inputs-dl0_dl2.yaml"]
+        ),
+        # Process DL0 DL1
+        (
+            "test/workflows/datapipe/workflow_dl0_dl2/process_dl0_dl1.cwl",
+            ["test/workflows/datapipe/type_dependencies/job/dl0_dl2_inputs/inputs-dl0_dl1.yaml"]
+        ),
+        # Process DL1 DL2
+        (
+            "test/workflows/datapipe/workflow_dl0_dl2/process_dl1_dl2.cwl",
+           ["test/workflows/datapipe/type_dependencies/job/dl0_dl2_inputs/inputs-dl1_dl2.yaml"]
+        )
     ],
 )
 def test_run_job_success(cli_runner, cleanup, cwl_file, inputs):

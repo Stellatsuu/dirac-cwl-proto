@@ -1,0 +1,7 @@
+input_files:
+- class: File
+  path: 'gamma_1.dl1.h5'
+- class: File
+  path: 'gamma_2.dl1.h5'
+
+output_filename: 'merged.dl1.h5'
