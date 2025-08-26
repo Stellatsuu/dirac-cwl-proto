@@ -54,6 +54,14 @@ def cleanup():
                 "test/workflows/helloworld/type_dependencies/job/inputs-helloworld_with_inputs3.yaml",
             ],
         ),
+        # --- Test metadata example ---
+        # A string input is passed
+        (
+            "test/workflows/test_meta/test_meta.cwl",
+            [
+                "test/workflows/test_meta/override_dirac_hints.yaml",
+            ],
+        ),
         # --- Crypto example ---
         # Complete
         (
@@ -210,19 +218,23 @@ def test_run_job_success(cli_runner, cleanup, cwl_file, inputs):
             [],
             "Recursingintostep",
         ),
+        # The configuration file is malformed: the hints are overridden more than once
+        (
+            "test/workflows/test_meta/test_meta.cwl",
+            [
+                "test/workflows/test_meta/override_dirac_hints_twice.yaml",
+            ],
+            "Failedtovalidatetheparameter",
+        ),
     ],
 )
-def test_run_job_validation_failure(
-    cli_runner, cleanup, cwl_file, inputs, expected_error
-):
+def test_run_job_validation_failure(cli_runner, cleanup, cwl_file, inputs, expected_error):
     command = ["job", "submit", cwl_file]
     for input in inputs:
         command.extend(["--parameter-path", input])
     result = cli_runner.invoke(app, command)
     assert "Job(s) done" not in result.stdout, "The job did complete successfully."
-    assert expected_error in re.sub(
-        r"\s+", "", result.stdout
-    ), "The expected error was not found."
+    assert expected_error in re.sub(r"\s+", "", result.stdout), "The expected error was not found."
 
 
 # -----------------------------------------------------------------------------
@@ -277,9 +289,7 @@ def test_run_job_validation_failure(
         ),
     ],
 )
-def test_run_nonblocking_transformation_success(
-    cli_runner, cleanup, cwl_file, metadata
-):
+def test_run_nonblocking_transformation_success(cli_runner, cleanup, cwl_file, metadata):
     # CWL file is the first argument
     command = ["transformation", "submit", cwl_file]
     # Add the metadata file
@@ -287,9 +297,7 @@ def test_run_nonblocking_transformation_success(
         command.extend(["--metadata-path", metadata])
 
     result = cli_runner.invoke(app, command)
-    assert (
-        "Transformation done" in result.stdout
-    ), f"Failed to run the transformation: {result.stdout}"
+    assert "Transformation done" in result.stdout, f"Failed to run the transformation: {result.stdout}"
 
 
 @pytest.mark.parametrize(
@@ -348,9 +356,7 @@ def test_run_nonblocking_transformation_success(
         ),
     ],
 )
-def test_run_blocking_transformation_success(
-    cli_runner, cleanup, cwl_file, metadata, destination_source_input_data
-):
+def test_run_blocking_transformation_success(cli_runner, cleanup, cwl_file, metadata, destination_source_input_data):
     # Define a function to run the transformation command and return the result
     def run_transformation():
         command = ["transformation", "submit", cwl_file]
@@ -372,9 +378,7 @@ def test_run_blocking_transformation_success(
     time.sleep(5)
 
     # Ensure the command is waiting (e.g., it hasn't finished yet)
-    assert (
-        transformation_thread.is_alive()
-    ), "The transformation should be waiting for files."
+    assert transformation_thread.is_alive(), "The transformation should be waiting for files."
 
     for destination, inputs in destination_source_input_data.items():
         # Copy the input data to the destination
@@ -387,12 +391,8 @@ def test_run_blocking_transformation_success(
     transformation_thread.join(timeout=60)
 
     # Check if the transformation completed successfully
-    assert (
-        transformation_result is not None
-    ), "The transformation result was not captured."
-    assert (
-        "Transformation done" in transformation_result.stdout
-    ), "The transformation did not complete successfully."
+    assert transformation_result is not None, "The transformation result was not captured."
+    assert "Transformation done" in transformation_result.stdout, "The transformation did not complete successfully."
 
 
 @pytest.mark.parametrize(
@@ -430,19 +430,13 @@ def test_run_blocking_transformation_success(
         ),
     ],
 )
-def test_run_transformation_validation_failure(
-    cli_runner, cwl_file, cleanup, metadata, expected_error
-):
+def test_run_transformation_validation_failure(cli_runner, cwl_file, cleanup, metadata, expected_error):
     command = ["transformation", "submit", cwl_file]
     if metadata:
         command.extend(["--metadata-path", metadata])
     result = cli_runner.invoke(app, command)
-    assert (
-        "Transformation done" not in result.stdout
-    ), "The transformation did complete successfully."
-    assert expected_error in re.sub(
-        r"\s+", "", result.stdout
-    ), "The expected error was not found."
+    assert "Transformation done" not in result.stdout, "The transformation did complete successfully."
+    assert expected_error in re.sub(r"\s+", "", result.stdout), "The expected error was not found."
 
 
 # -----------------------------------------------------------------------------
@@ -495,9 +489,7 @@ def test_run_simple_production_success(cli_runner, cleanup, cwl_file, metadata):
         command.extend(["--steps-metadata-path", metadata])
 
     result = cli_runner.invoke(app, command)
-    assert (
-        "Production done" in result.stdout
-    ), f"Failed to run the production: {result.stdout}"
+    assert "Production done" in result.stdout, f"Failed to run the production: {result.stdout}"
 
 
 @pytest.mark.parametrize(
@@ -553,19 +545,13 @@ def test_run_simple_production_success(cli_runner, cleanup, cwl_file, metadata):
         ),
     ],
 )
-def test_run_production_validation_failure(
-    cli_runner, cleanup, cwl_file, metadata, expected_error
-):
+def test_run_production_validation_failure(cli_runner, cleanup, cwl_file, metadata, expected_error):
     command = ["production", "submit", cwl_file]
     if metadata:
         command.extend(["--steps-metadata-path", metadata])
     result = cli_runner.invoke(app, command)
 
-    assert (
-        "Transformation done" not in result.stdout
-    ), "The transformation did complete successfully."
-    assert expected_error in re.sub(
-        r"\s+", "", f"{result.stdout}"
-    ) or expected_error in re.sub(
+    assert "Transformation done" not in result.stdout, "The transformation did complete successfully."
+    assert expected_error in re.sub(r"\s+", "", f"{result.stdout}") or expected_error in re.sub(
         r"\s+", "", f"{result.exception}"
     ), "The expected error was not found."
