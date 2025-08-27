@@ -1,0 +1,18 @@
+gammas:
+  class: File
+  path: 'gamma_test_geo_en_cl.dl2.h5'
+
+electrons:
+  class: File
+  path: 'electron_test_geo_en_cl.dl2.h5'
+
+protons:
+  class: File
+  path: 'proton_test_geo_en_cl.dl2.h5'
+
+event_selection:
+  class: File
+  path: 'event_selection.fits'
+
+output_filename: 'irf.fits.gz'
+output_metrics_filename: 'performance_metrics.fits'

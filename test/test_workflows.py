@@ -156,7 +156,7 @@ def cleanup():
             "test/workflows/datapipe/merge.cwl",
             ["test/workflows/datapipe/type_dependencies/job/merge_inputs/inputs-merge.yaml"]
         ),
-        # Complete workflow
+        # Complete Process
         (
             "test/workflows/datapipe/workflow_dl0_dl2/workflow_dl0_to_dl2.cwl",
             ["test/workflows/datapipe/type_dependencies/job/dl0_dl2_inputs/inputs-dl0_dl2.yaml"]
@@ -170,6 +170,21 @@ def cleanup():
         (
             "test/workflows/datapipe/workflow_dl0_dl2/process_dl1_dl2.cwl",
            ["test/workflows/datapipe/type_dependencies/job/dl0_dl2_inputs/inputs-dl1_dl2.yaml"]
+        ),
+        # Complete IRF
+        (
+            "test/workflows/datapipe/workflow_irf/workflow_optimize_and_irf.cwl",
+            ["test/workflows/datapipe/type_dependencies/job/irf_inputs/inputs-irf.yaml"]
+        ),
+        # Optimize IRF
+        (
+            "test/workflows/datapipe/workflow_irf/optimize.cwl",
+            ["test/workflows/datapipe/type_dependencies/job/irf_inputs/inputs-irf_optimize.yaml"]
+        ),
+        # Compute IRF
+        (
+            "test/workflows/datapipe/workflow_irf/compute_irf.cwl",
+            ["test/workflows/datapipe/type_dependencies/job/irf_inputs/inputs-irf_compute.yaml"]
         )
     ],
 )
