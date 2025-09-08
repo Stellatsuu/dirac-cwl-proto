@@ -1,6 +1,7 @@
 """
 CLI interface to run a workflow as a production.
 """
+
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, List, Optional
@@ -10,6 +11,7 @@ from cwl_utils.pack import pack
 from cwl_utils.parser import load_document
 from cwl_utils.parser.cwl_v1_2 import (
     CommandLineTool,
+    ExpressionTool,
     Workflow,
     WorkflowInputParameter,
     WorkflowStep,
@@ -20,9 +22,9 @@ from ruamel.yaml import YAML
 from schema_salad.exceptions import ValidationException
 
 from dirac_cwl_proto.submission_models import (
-    JobDescriptionModel,
     ProductionStepMetadataModel,
     ProductionSubmissionModel,
+    TaskDescriptionModel,
     TransformationMetadataModel,
     TransformationSubmissionModel,
 )
@@ -171,7 +173,7 @@ def _get_transformations(
         step_data: ProductionStepMetadataModel = production.steps_metadata.get(
             step_id,
             ProductionStepMetadataModel(
-                description=JobDescriptionModel(),
+                description=TaskDescriptionModel(),
                 metadata=TransformationMetadataModel(),
             ),
         )
@@ -189,7 +191,7 @@ def _get_transformations(
 
 def _create_subworkflow(
     wf_step: WorkflowStep, cwlVersion: str, inputs: List[WorkflowInputParameter]
-) -> Workflow | CommandLineTool:
+) -> Workflow | CommandLineTool | ExpressionTool:
     """Create a CWL file for a given step.
 
     If the step is a workflow, a new workflow is created.
