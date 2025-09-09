@@ -1,0 +1,4 @@
+processing_config: null
+
+dl1: 'dataset://gamma_prod5.simtel.zst'
+dl2_filename: 'events.dl2.h5'

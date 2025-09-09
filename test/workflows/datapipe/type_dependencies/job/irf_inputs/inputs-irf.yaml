@@ -1,0 +1,28 @@
+irf_config: null
+optimize_config: null
+
+gammas_optimize:
+  class: File
+  path: 'gamma_test_geo_en_cl.dl2.h5'
+
+protons_optimize:
+  class: File
+  path: 'proton_test_geo_en_cl.dl2.h5'
+
+electrons_optimize:
+  class: File
+  path: 'electron_test_geo_en_cl.dl2.h5'
+
+gammas_irf:
+  class: File
+  path: 'gamma_test_geo_en_cl.dl2.h5'
+
+protons_irf:
+  class: File
+  path: 'proton_test_geo_en_cl.dl2.h5'
+
+electrons_irf:
+  class: File
+  path: 'electron_test_geo_en_cl.dl2.h5'
+
+analysis_name: 'ctao-example'
